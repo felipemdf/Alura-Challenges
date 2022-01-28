@@ -1,4 +1,4 @@
-# Semana 01
+# Api Rest Controle Financeiro
   Api do desafio back-end da Semana 01 do Alura Challenges, a api consiste em uma aplicação para controle de orçamento que permiti que uma pessoa cadastre suas receitas e despesas do mês.
 
 ## :toolbox: Tecnologias
