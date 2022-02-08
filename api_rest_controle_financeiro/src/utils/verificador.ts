@@ -1,27 +1,20 @@
 import { Model, Types } from "mongoose";
-import { CreateReceitaDto } from "src/receitas/dto/create-receita.dto";
-import { UpdateReceitaDto } from "src/receitas/dto/update-receita.dto";
-import { ReceitaDocument } from "src/receitas/entities/receita.entity";
+
 
 export class Verificador {
-    dataAtual: Date;
-    anoAtual: String;
-    mesAtual: String;
-    receitaModel: Model<ReceitaDocument>;
-    createReceitaDto: CreateReceitaDto;
-    numeroRepetições: number;
-
     static async verificarRepeticao(model: Model<any>, Dto: any){
-        let dataAtual = new Date();
-        let anoAtual = dataAtual.getFullYear().toString();
-        let mesAtual = (dataAtual.getMonth() + 1).toString();
-        mesAtual = (mesAtual.length == 1) ? mesAtual = '0' + mesAtual : mesAtual = mesAtual + "";
+        let dataDto = new Date(Dto.data);
+        let anoDto = dataDto.getFullYear().toString();
+        let mesDto = (dataDto.getMonth() + 1).toString();
+        mesDto = (mesDto.length == 1) ? mesDto = '0' + mesDto : mesDto = mesDto + "";
 
         const dadosRepetidos = model.find({
-            dataCriacao: { $gte: `${anoAtual}-${mesAtual}-01`, $lte: `${anoAtual}-${mesAtual}-31`},
+            data: { $gte: `${anoDto}-${mesDto}-01`, $lte: `${anoDto}-${mesDto}-31`},
             descricao: Dto.descricao
           }).exec();
-
+        
+        //  console.log((await dadosRepetidos).toString());
+        
         let numeroRepetições = (await dadosRepetidos).length;
 
         return numeroRepetições;

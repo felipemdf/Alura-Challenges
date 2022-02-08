@@ -12,6 +12,12 @@ export class Despesa {
     @Prop({required: true})
     valor: Number;
 
+    @Prop({lowercase: true, default: 'outros', enum: ['alimentação', 'saúde', 'moradia', 'transporte', 'educação', 'lazer', 'imprevistos', 'outros']})
+    categoria: String;
+
+    @Prop({required: true})
+    data: Date;
+
     @Prop({default: Date.now})
     dataCriacao: Date;
 

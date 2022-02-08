@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Verificador } from 'src/utils/verificador';
+import { GeradorData } from '../utils/geradorData';
+import { Verificador } from '../utils/verificador';
 import { CreateReceitaDto } from './dto/create-receita.dto';
 import { UpdateReceitaDto } from './dto/update-receita.dto';
 import { Receita, ReceitaDocument } from './entities/receita.entity';
@@ -11,7 +12,6 @@ export class ReceitasService {
   constructor(@InjectModel(Receita.name) private receitaModel: Model<ReceitaDocument>){}
 
   async create(createReceitaDto: CreateReceitaDto) {
-
     //Verificar quantos dados repetidos dentro do mês
     let dadosRepetidos = Verificador.verificarRepeticao(this.receitaModel, createReceitaDto);
 
@@ -27,7 +27,7 @@ export class ReceitasService {
     return receita;
   }
 
-  findAll(): Promise<Receita[]>{
+  findAll(){
     const receitas = this.receitaModel.find().exec();
     return receitas;
   }
@@ -38,6 +38,29 @@ export class ReceitasService {
     const receita = await this.receitaModel.findById(id).exec();
 
     if (!receita){return {mensagem: `Não existe a receita #${id}!`}}
+
+    return receita;
+  }
+
+  async findByDescricao(descricao: string) {
+    const receita = await this.receitaModel.find({
+      descricao: {$regex: `${descricao}`}
+    })
+
+    if (!receita){return {mensagem: `Não existe a receita com descrição contendo "${descricao}!"`}}
+
+    return receita;
+  }
+
+  async findByData(mes: string, ano?: string) {
+    let {ultimoDia, anoAtual} = GeradorData.ultimoDiaMes();
+    (ano) ? ano = ano : ano = anoAtual.toString();
+
+    let receita = await this.receitaModel.find({
+      data: { $gte: `${ano}-${mes}-01`, $lte: `${ano}-${mes}-${ultimoDia}`}
+    })
+
+    if (!receita){return {mensagem: `Não existe a receita com data especificada!`}}
 
     return receita;
   }

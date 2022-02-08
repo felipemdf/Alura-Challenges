@@ -7,6 +7,9 @@ import { Receita, ReceitaSchema } from './entities/receita.entity';
 @Module({
   imports: [MongooseModule.forFeature([{name: Receita.name, schema: ReceitaSchema}])],
   controllers: [ReceitasController],
-  providers: [ReceitasService]
+  providers: [ReceitasService],
+  exports: [ReceitasService],
 })
-export class ReceitasModule {}
+export class ReceitasModule {
+  constructor(private receitasService: ReceitasService) {}
+}

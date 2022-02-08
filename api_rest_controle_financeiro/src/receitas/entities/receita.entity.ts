@@ -12,12 +12,23 @@ export class Receita {
     @Prop({required: true})
     valor: Number;
 
+    @Prop({required: true})
+    data: Date;
+    
     @Prop({default: Date.now})
     dataCriacao: Date;
 
     @Prop({default: Date.now})
     dataAtualizacao: Date;
 
+
+    constructor(receita?: Partial<Receita>){
+        this.descricao = receita?.descricao;
+        this.valor = receita?.valor;
+        this.data = receita?.data;
+        this.dataCriacao = receita?.dataCriacao;
+        this.dataAtualizacao = receita?.dataAtualizacao;
+    }
 }
 
 
