@@ -11,4 +11,5 @@
 :white_check_mark: **API com rotas implementadas seguindo as boas práticas do modelo REST**</br>
 :white_check_mark: **Validações feitas conforme as regras de negócio**</br>
 :white_check_mark: **Implementação de base de dados para persistência das informações**</br>
-:white_large_square: **Serviço de autenticação/autorização para restringir acesso às informações**</br>
+:white_check_mark: **Serviço de autenticação/autorização para restringir acesso às informações**</br>
+:white_large_square: **Testes unitários**</br>
