@@ -7,6 +7,9 @@ import { Despesa, DespesaSchema } from './entities/despesa.entity';
 @Module({
   imports: [MongooseModule.forFeature([{name: Despesa.name, schema: DespesaSchema}])],
   controllers: [DespesasController],
-  providers: [DespesasService]
+  providers: [DespesasService],
+  exports: [DespesasService],
 })
-export class DespesasModule {}
+export class DespesasModule {
+  constructor(private despesasService: DespesasService) {}
+}

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { GeradorData } from 'src/utils/geradorData';
 import { Verificador } from 'src/utils/verificador';
 import { CreateDespesaDto } from './dto/create-despesa.dto';
 import { UpdateDespesaDto } from './dto/update-despesa.dto';
 import { Despesa, DespesaDocument } from './entities/despesa.entity';
+
 
 @Injectable()
 export class DespesasService {
@@ -40,6 +42,30 @@ export class DespesasService {
 
     return despesa;
   }
+
+  async findByDescricao(descricao: string) {
+    const despesa = await this.despesaModel.find({
+      descricao: {$regex: `${descricao}`}
+    });
+    
+    if (!despesa){return {mensagem: `Não existe a despesa com descrição contendo "${descricao}!"`}}
+
+    return despesa;
+  }
+
+  async findByData(mes: string, ano?: string) {
+    let {ultimoDia, anoAtual} = GeradorData.ultimoDiaMes();
+    (ano) ? ano = ano : ano = anoAtual.toString();
+
+    let despesa = await this.despesaModel.find({
+      data: { $gte: `${ano}-${mes}-01`, $lte: `${ano}-${mes}-${ultimoDia}`}
+    })
+
+    if (!despesa){return {mensagem: `Não existe a despesa com data especificada!`}}
+
+    return despesa;
+  }
+
 
   async update(id: string, updateDespesaDto: UpdateDespesaDto) {
     //Verificar quantos dados repetidos dentro do mês
